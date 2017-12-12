@@ -6,3 +6,5 @@ node_modules/
 
 ## API keys ##
 src/config/youtube.js
+
+package-lock.json

@@ -1,5 +1,0 @@
-.eslint*
-**/node_modules
-**/vendor
-**/*.min.js
-src/data/*
