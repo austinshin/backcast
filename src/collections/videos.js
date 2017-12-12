@@ -1,22 +1,37 @@
 var Videos = Backbone.Collection.extend({
   
-  search: function() {
-    $.ajax({ 
+  model: Video, 
+
+  parse: function(obj) {
+    return obj.items;
+  },
+  
+  search: function(message, collectionAll) { 
+    Backbone.ajax({ 
       type: 'GET',
       url: 'https://www.googleapis.com/youtube/v3/search',
-      dataType: 'application/json',
-      data: {
-        part: 'snippet',
-        q: 'surfing',
-        maxResults: 25,
-        type: ''
+      dataType: 'json',
+      data:  {
+        key: window.YOUTUBE_API_KEY, 
+        part: 'snippet', 
+        q: message, 
+        maxResults: 5, 
+        type: 'video', 
+        videoEmbeddable: true
       },
-      success: function() {
-        console.log('success');
+      success: (data) => {
+        console.log('Search query succeeded');
+        this.reset();
+        data.items.forEach((e) => {
+          var videoDataFromYoutube = new Video(e);
+          this.add(videoDataFromYoutube);
+        });
+        this.models[0].select();
+        this.trigger('sync');
+      }, 
+      error: function(data) {
+        console.error(data);
       }
     });
   },
-
-  model: Video
-
 });
